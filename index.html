@@ -57,13 +57,27 @@
     .shower .slide .chev:nth-child(even) { background: var(--kp-blue); }
     .shower .slide .stat b { display: block; font: bold 52px/1.1 var(--kp-mono); color: var(--kp-mag); }
     .shower .slide .stat:nth-child(even) b { color: var(--kp-blue); }
-    .shower .slide .np { border: 2px solid var(--do-color-fg); border-radius: 10px; padding: .5em .75em; }
-    .shower .slide .np > p { margin: 0; }
-    .shower .slide .np .graph { border-radius: 6px; padding: .25em .5em; margin-top: .5em; }
-    .shower .slide .np .graph p { margin: 0; font-size: 14px; }
-    .shower .slide :is(.np, .chain) .a { background: var(--kp-pink); border: 1px solid var(--kp-mag); }
-    .shower .slide :is(.np, .chain) .p { background: var(--kp-sky); border: 1px solid var(--kp-blue); }
-    .shower .slide .np .i { background: var(--do-color-bg-subtle); border: 1px solid var(--do-color-border); }
+    .shower .slide .npx { border: 3px solid var(--do-color-fg); border-radius: 4px; padding: 12px 18px 28px; margin: 0; font-family: Arial, Helvetica, sans-serif; }
+    .shower .slide .npx-head { display: flex; align-items: center; gap: 12px; margin-bottom: 2px; }
+    .shower .slide .npx-head svg { width: 26px; height: 26px; fill: var(--do-color-fg); flex: none; }
+    .shower .slide .npx-head span { flex: 1; text-align: center; font: bold 24px/1.2 Arial, Helvetica, sans-serif; }
+    .shower .slide .npx-uri { margin: 0 0 8px; text-align: center; font: 11px var(--kp-mono); color: var(--do-color-fg-muted); }
+    .shower .slide .npx-g { position: relative; border: 1.5px solid #333; padding: 12px 14px 18px; text-align: center; }
+    .shower .slide .npx-g + .npx-g { margin-top: 20px; }
+    .shower .slide .npx-g h3 { font: bold 22px/1.15 Arial, Helvetica, sans-serif; color: inherit; margin: 0 0 2px; }
+    .shower .slide .npx-g p { margin: 0; font-size: 13px; line-height: 1.3; color: inherit; }
+    .shower .slide .npx-a { background: #FFBB00; color: #000; padding-bottom: 26px; }
+    .shower .slide .npx-a h3 { font-size: 30px; }
+    .shower .slide .npx-p { background: #8D3B72; color: #FFF; }
+    .shower .slide .npx-i { background: #325981; color: #FFF; }
+    .shower .slide .npx-a::after, .shower .slide .npx-i::after { content: ""; position: absolute; left: 50%; width: 2.5px; margin-left: -1.25px; background: var(--do-color-fg); }
+    .shower .slide .npx-a::after { top: calc(100% - 5px); height: 25px; }
+    .shower .slide .npx-i::after { top: 100%; height: 16px; }
+    .shower .slide .npx-a::before, .shower .slide .npx-i::before { content: ""; position: absolute; left: 50%; width: 10px; height: 10px; margin-left: -5px; border-radius: 50%; background: var(--do-color-fg); z-index: 1; }
+    .shower .slide .npx-a::before { bottom: 0; }
+    .shower .slide .npx-i::before { top: calc(100% + 12px); }
+    .shower .slide .chain .a { background: var(--kp-pink); border: 1px solid var(--kp-mag); }
+    .shower .slide .chain .p { background: var(--kp-sky); border: 1px solid var(--kp-blue); }
     .shower .slide .chain > div { border-radius: 6px; padding: 6px 12px; font-size: 14px; }
     .shower .slide .chain b { display: block; font-family: var(--kp-mono); }
     .shower .slide .chain .arrow { text-align: center; padding: 0; color: var(--do-color-fg-muted); line-height: 1; }
@@ -197,12 +211,13 @@
       <section class="slide" id="nanopublications" inlist="" rel="schema:hasPart" resource="#nanopublications" typeof="bibo:Slide">
         <h2 property="schema:name"><span class="key">Nanopublications:</span> claims as first-class citizens</h2>
         <div datatype="rdf:HTML" property="schema:description" class="cols c2">
-          <div class="np">
-            <p class="mono tiny muted">Head · https://w3id.org/np/RA…</p>
-            <div class="graph a"><h3>Assertion</h3><p>the claim itself — e.g. gene A affects disease B</p></div>
-            <div class="graph p"><h3 class="blue">Provenance</h3><p>where the assertion comes from — study, dataset, method</p></div>
-            <div class="graph i"><h3>Publication info</h3><p>who published it, when, licence, signature</p></div>
-          </div>
+          <figure class="npx" aria-label="Structure of a nanopublication: assertion, provenance and publication info">
+            <div class="npx-head"><svg viewBox="0 0 8 8" aria-hidden="true"><path d="M5,8H8L3,0H0M8,4.8V0H5M0,3.2V8H3" /></svg><span>nanopublication</span></div>
+            <p class="npx-uri">https://w3id.org/np/RA…</p>
+            <div class="npx-g npx-a"><h3>assertion</h3><p>the claim itself — e.g. gene A affects disease B</p></div>
+            <div class="npx-g npx-p"><h3>provenance</h3><p>where the assertion comes from — study, dataset, method</p></div>
+            <div class="npx-g npx-i"><h3>publication info</h3><p>who published it, when, licence, signature</p></div>
+          </figure>
           <ul>
             <li>Small, self-contained snippet of a knowledge graph (RDF)</li>
             <li>Each carries its own <strong>attribution</strong> and <strong>provenance</strong></li>
@@ -284,6 +299,15 @@
             <li>No single point of failure or control</li>
             <li class="placeholder">[Add current numbers: registries, nanopublications, agents]</li>
           </ul>
+          <footer class="brand"><p>knowledge <span>pixels</span></p></footer>
+        </div>
+      </section>
+
+      <section class="slide" id="nanopub-monitor" inlist="" rel="schema:hasPart" resource="#nanopub-monitor" typeof="bibo:Slide">
+        <h2 property="schema:name"><span class="key">Nanopub Monitor:</span> the network, live</h2>
+        <div datatype="rdf:HTML" property="schema:description">
+          <img src="media/monitor.png" alt="Nanopub Monitor: world map of 17 nanopub services on about 6 servers, and a table of registries, query services, Nanodash instances and monitors with their status, nanopub counts and locations" style="max-height: 430px; margin: 0 auto; border: 1px solid var(--do-color-border);" />
+          <p class="small" style="text-align: center; margin-top: 10px;">4 registries and 3 query services in consensus on 93,131 nanopubs, in Austria, Germany, Finland and Canada · <a class="mono" href="https://monitor.nanodash.net/" rel="schema:mentions">monitor.nanodash.net</a> · screenshot 29 Sep 2026</p>
           <footer class="brand"><p>knowledge <span>pixels</span></p></footer>
         </div>
       </section>
