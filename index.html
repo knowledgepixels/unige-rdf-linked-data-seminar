@@ -8,107 +8,172 @@
   <link href="https://dokie.li/media/css/dokieli.css" media="all" rel="stylesheet" />
   <script src="https://dokie.li/scripts/dokieli.js"></script>
   <style>
+    /* Knowledge Pixels palette, mapped onto dokieli's theme tokens so light and dark themes both work */
     .shower .slide {
-      --kp-mag: #D81B60; --kp-blue: #1E88E5; --kp-ink: #111111; --kp-grey: #666666;
-      --kp-tint: #F4F6FA; --kp-pink: #FCE4EC; --kp-sky: #E3F2FD; --kp-mono: "Courier New", ui-monospace, monospace;
-      padding: 44px 56px 36px 56px;
-      background: #FFFFFF;
-      color: var(--kp-ink);
-      font: 18px/1.4 Arial, Helvetica, sans-serif;
+      --kp-mag: #D81B60; --kp-blue: #1E88E5; --kp-mono: "Courier New", ui-monospace, monospace;
+      --kp-pink: color-mix(in srgb, var(--kp-mag) 14%, var(--do-color-bg));
+      --kp-sky: color-mix(in srgb, var(--kp-blue) 14%, var(--do-color-bg));
+      display: flex; flex-direction: column;
+      /* dokieli's typefaces and colours, at a denser scale than its 24px/2 default */
+      padding: 44px 56px 0; font-size: 18px; line-height: 1.4;
     }
-    .shower .slide :is(p, li, span, dd, dt, div, figcaption, em, strong, b, h3) { color: inherit; }
-    .shower .slide h2 { font: bold 24px/1.2 var(--kp-mono); font-size: 26px !important; letter-spacing: -0.5px; max-width: none; color: var(--kp-ink); margin-bottom: 20px; }
-    .shower .slide h2 .key { color: var(--kp-mag); }
-    .shower .slide h3 { font: bold 17px/1.2 var(--kp-mono); color: var(--kp-mag); margin: 0 0 8px; }
-    .shower .slide h3.blue, .shower .slide .blue { color: var(--kp-blue); }
-    .shower .slide ul { list-style: disc; margin: 0 0 0 1.1em; }
-    .shower .slide ul li { margin-bottom: 6px; }
-    .shower .slide p { margin-bottom: 10px; }
-    .shower .slide .lead { color: var(--kp-grey); font-size: 16px; margin: -8px 0 16px; }
-    .shower .slide .muted { color: var(--kp-grey); }
+    .shower .slide > h2 { flex: none; font-size: 32px; margin-bottom: 20px; }
+    .shower .slide.dark > h2 { font-size: 52px; }
+    .shower .slide > [property="schema:description"] { margin-block: auto; padding-bottom: 24px; width: 100%; }
+    .shower .slide h2 .key, .shower .slide .accent { color: var(--kp-mag); }
+    .shower .slide .blue { color: var(--kp-blue); }
+    .shower .slide .lead, .shower .slide .muted, .shower .slide .placeholder { color: var(--do-color-fg-muted); }
+    .shower .slide .placeholder { font-style: italic; }
     .shower .slide .small { font-size: 14px; }
     .shower .slide .tiny { font-size: 12px; }
     .shower .slide .mono { font-family: var(--kp-mono); }
-    .shower .slide .accent { color: var(--kp-mag); }
-    .shower .slide .placeholder { color: var(--kp-grey); font-style: italic; }
-    .shower .slide a { color: var(--kp-blue); }
-    .shower .slide.dark a { color: #F48FB1; }
-    .shower .slide .cols { display: grid; gap: 28px; align-items: center; }
-    .shower .slide .cols:is(.c3, .c4) { align-items: stretch; }
+    .shower .slide img:not(address img, footer img) { max-width: 100%; max-height: 440px; width: auto; height: auto; display: block; margin-inline: auto; }
+
+    /* Layout: dokieli has no column grid */
+    .shower .slide .cols { display: grid; gap: 1em; align-items: center; }
+    .shower .slide .cols:is(.c3, .c4), .shower .slide .cols:has(> .card) { align-items: stretch; }
     .shower .slide .c2 { grid-template-columns: 1fr 1fr; }
-    .shower .slide .c3 { grid-template-columns: repeat(3, 1fr); gap: 16px; }
-    .shower .slide .c4 { grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .shower .slide .c-2-3 { grid-template-columns: 2fr 3fr; }
+    .shower .slide .c3 { grid-template-columns: repeat(3, 1fr); }
+    .shower .slide .c4 { grid-template-columns: repeat(4, 1fr); }
     .shower .slide .c-img { grid-template-columns: 5fr 4fr; }
     .shower .slide .c-img-r { grid-template-columns: 4fr 5fr; }
-    .shower .slide img { max-width: 100%; display: block; }
-    .shower .slide .card { background: var(--kp-tint); border-radius: 8px; padding: 12px 14px; }
-    .shower .slide .card h3 { margin-bottom: 6px; }
+    .shower .slide :is(.cols, .steps, .chevrons, .step-list):not(:last-child) { margin-bottom: 16px; }
+
+    /* Components */
+    .shower .slide .card { background: var(--do-color-bg-subtle); border-radius: 8px; padding: .5em .75em; }
     .shower .slide .card p { margin: 0; font-size: 15px; }
-    .shower .slide .callout { background: var(--kp-pink); border: 1px solid var(--kp-mag); border-radius: 8px; padding: 12px 16px; margin: 18px 0 12px; }
-    .shower .slide .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 16px; }
+    .shower .slide .callout { background: var(--kp-pink); border: 1px solid var(--kp-mag); border-radius: 8px; padding: .5em .75em; margin-bottom: 1em; }
+    .shower .slide .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1em; }
     .shower .slide .step { text-align: center; }
-    .shower .slide .num { display: inline-flex; align-items: center; justify-content: center; width: 52px; height: 52px; border-radius: 50%; background: var(--kp-mag); color: #FFF; font: bold 22px var(--kp-mono); margin-bottom: 8px; }
-    .shower .slide .step:nth-child(even) .num, .shower .slide .num.blue { background: var(--kp-blue); color: #FFF; }
+    .shower .slide .step-list .step { display: grid; grid-template-columns: 64px 1fr; text-align: left; margin-bottom: .5em; }
+    .shower .slide .num { display: inline-flex; align-items: center; justify-content: center; width: 52px; height: 52px; border-radius: 50%; background: var(--kp-mag); color: #FFF; font: bold 22px var(--kp-mono); }
+    .shower .slide .step:nth-child(even) .num, .shower .slide .num.blue { background: var(--kp-blue); }
     .shower .slide .step b { display: block; font-family: var(--kp-mono); }
-    .shower .slide .step span { display: block; color: var(--kp-grey); font-size: 14px; }
-    .shower .slide .step span.num { display: inline-flex; color: #FFF; font-size: 22px; }
-    .shower .slide .chevrons { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin-bottom: 6px; }
+    .shower .slide .step span:not(.num) { display: block; color: var(--do-color-fg-muted); font-size: 14px; }
+    .shower .slide .chevrons { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
     .shower .slide .chev { background: var(--kp-mag); color: #FFF; font: bold 14px/1.2 var(--kp-mono); padding: 14px 24px 14px 34px; clip-path: polygon(0 0, 88% 0, 100% 50%, 88% 100%, 0 100%, 12% 50%); height: 62px; display: flex; align-items: center; }
     .shower .slide .chev:first-child { clip-path: polygon(0 0, 88% 0, 100% 50%, 88% 100%, 0 100%); padding-left: 16px; }
     .shower .slide .chev:nth-child(even) { background: var(--kp-blue); }
     .shower .slide .stat b { display: block; font: bold 52px/1.1 var(--kp-mono); color: var(--kp-mag); }
     .shower .slide .stat:nth-child(even) b { color: var(--kp-blue); }
-    .shower .slide .np { border: 2px solid var(--kp-ink); border-radius: 10px; padding: 10px 12px; }
-    .shower .slide .np .graph { border-radius: 6px; padding: 6px 10px; margin-top: 8px; }
+    .shower .slide .np { border: 2px solid var(--do-color-fg); border-radius: 10px; padding: .5em .75em; }
+    .shower .slide .np > p { margin: 0; }
+    .shower .slide .np .graph { border-radius: 6px; padding: .25em .5em; margin-top: .5em; }
     .shower .slide .np .graph p { margin: 0; font-size: 14px; }
-    .shower .slide .np .a { background: var(--kp-pink); border: 1px solid var(--kp-mag); }
-    .shower .slide .np .p { background: var(--kp-sky); border: 1px solid var(--kp-blue); }
-    .shower .slide .np .i { background: var(--kp-tint); border: 1px solid var(--kp-ink); }
-    .shower .slide pre.code { background: #1E1E1E; color: #E0E0E0; border-radius: 8px; padding: 14px 16px; font: 14px/1.5 var(--kp-mono); white-space: pre; margin: 0; }
-    .shower .slide .rows .row { display: grid; grid-template-columns: 200px 1fr 130px; align-items: center; background: var(--kp-tint); border-radius: 6px; padding: 8px 14px; margin-bottom: 8px; font-size: 16px; }
-    .shower .slide .rows .row b { font-family: var(--kp-mono); color: var(--kp-mag); }
-    .shower .slide .rows .row:nth-child(even) b { color: var(--kp-blue); }
-    .shower .slide .pill { justify-self: end; border: 1px solid var(--kp-grey); border-radius: 12px; padding: 1px 12px; font-size: 13px; color: var(--kp-grey); background: #FFF; }
-    .shower .slide .pill.dev { border-color: #EF6C00; color: #EF6C00; background: #FFF3E0; }
-    .shower .slide .bars { display: grid; grid-template-columns: 170px 1fr; gap: 4px 10px; font-size: 13px; align-items: center; }
-    .shower .slide .bar { background: var(--kp-blue); height: 14px; position: relative; }
-    .shower .slide .bar span { position: absolute; left: calc(100% + 6px); top: -3px; font-size: 12px; }
+    .shower .slide :is(.np, .chain) .a { background: var(--kp-pink); border: 1px solid var(--kp-mag); }
+    .shower .slide :is(.np, .chain) .p { background: var(--kp-sky); border: 1px solid var(--kp-blue); }
+    .shower .slide .np .i { background: var(--do-color-bg-subtle); border: 1px solid var(--do-color-border); }
     .shower .slide .chain > div { border-radius: 6px; padding: 6px 12px; font-size: 14px; }
     .shower .slide .chain b { display: block; font-family: var(--kp-mono); }
-    .shower .slide .chain .arrow { text-align: center; padding: 0; color: var(--kp-grey); line-height: 1; }
-    .shower .slide .quote-line { font: 14px var(--kp-mono); color: var(--kp-mag); margin: 8px 0 14px; }
-    .shower .slide .brand { position: absolute; right: 24px; bottom: 12px; font: 12px var(--kp-mono); color: var(--kp-ink); }
-    .shower .slide .brand span { color: var(--kp-mag); }
-    .shower .slide { display: flex; flex-direction: column; }
-    .shower .slide > h2 { flex: none; }
-    .shower .slide > [property="schema:description"] { margin-top: auto; margin-bottom: auto; padding-bottom: 24px; width: 100%; }
-    .shower .slide.cover-slide { justify-content: center; padding-bottom: 60px; }
+    .shower .slide .chain .arrow { text-align: center; padding: 0; color: var(--do-color-fg-muted); line-height: 1; }
+    .shower .slide .rows .row { display: grid; grid-template-columns: 200px 1fr 130px; align-items: center; background: var(--do-color-bg-subtle); border-radius: 6px; padding: 8px 14px; margin-bottom: 8px; font-size: 16px; }
+    .shower .slide .rows .row b { font-family: var(--kp-mono); color: var(--kp-mag); }
+    .shower .slide .rows .row b a { color: inherit; }
+    .shower .slide .rows .row:nth-child(even) b { color: var(--kp-blue); }
+    .shower .slide .pill { justify-self: end; border: 1px solid currentColor; border-radius: 12px; padding: 1px 12px; font-size: 13px; color: var(--do-color-fg-muted); }
+    .shower .slide .pill.dev { color: #EF6C00; }
+    .shower .slide .bars { display: grid; grid-template-columns: 170px 1fr; gap: 4px 10px; font-size: 13px; align-items: center; }
+    .shower .slide .bar { background: var(--kp-blue); height: 14px; position: relative; }
+    .shower .slide .bar span { position: absolute; left: calc(100% + 6px); top: -3px; }
+    .shower .slide .quote-line { font-family: var(--kp-mono); color: var(--kp-mag); }
+
+    /* Brand footer: always visible, unlike dokieli's hover panel footer */
+    body.shower .slide [property="schema:description"] > footer.brand {
+      display: block; position: absolute; top: auto; right: 0; bottom: 0; left: 0;
+      padding: 0 24px 12px; background: none; transition: none;
+      text-align: right; font: 12px/1 var(--kp-mono);
+    }
+    .shower .slide footer.brand p { margin: 0; }
+    .shower .slide footer.brand span { color: var(--kp-mag); }
+
+    .shower .slide.cover-slide { justify-content: center; }
     .shower .slide.cover-slide > [property="schema:description"] { margin: 0; padding: 0; }
     .shower .slide.cover-slide .logo { font: 56px/1.05 var(--kp-mono); margin-bottom: 36px; }
-    .shower .slide.dark { background: var(--kp-ink); color: #FFF; }
-    .shower .slide.dark h2 { color: #FFF; font-size: 52px !important; margin-bottom: 40px; }
-    .shower .slide.dark dl { display: grid; grid-template-columns: 300px 1fr; gap: 16px 0; font-size: 20px; }
+    .shower .slide.dark { background: #111; color: #FFF; }
+    .shower .slide.dark h2 { color: #FFF; }
+    .shower .slide.dark dl { display: grid; grid-template-columns: 300px 1fr; }
     .shower .slide.dark dt { color: #BBB; }
     .shower .slide.dark a { color: #F48FB1; font-family: var(--kp-mono); }
     .shower .slide svg text { font-family: Arial, sans-serif; }
-    .shower .slide aside.notes { display: none; }
   </style>
 </head>
 
-<body class="shower single" prefix="schema: http://schema.org/ bibo: http://purl.org/ontology/bibo/ dcterms: http://purl.org/dc/terms/ rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<body about="" class="shower single" prefix="rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns# xsd: http://www.w3.org/2001/XMLSchema# owl: http://www.w3.org/2002/07/owl# dcterms: http://purl.org/dc/terms/ foaf: http://xmlns.com/foaf/0.1/ schema: http://schema.org/ bibo: http://purl.org/ontology/bibo/ dbr: http://dbpedia.org/resource/">
   <main>
     <article about="" typeof="bibo:Slideshow schema:PresentationDigitalDocument" dir="auto">
       <header class="caption">
         <h1 property="schema:name">Nanopublications: a decentralized common for research knowledge</h1>
-        <p><span rel="schema:author" resource="https://orcid.org/0000-0001-8492-0354"><span about="https://orcid.org/0000-0001-8492-0354" property="schema:name">Ashley Caselli</span></span> · <span rel="schema:publisher" resource="https://knowledgepixels.com/"><span about="https://knowledgepixels.com/" property="schema:name">Knowledge Pixels</span></span> · <time datetime="2026-09-29" property="schema:dateCreated">29 September 2026</time></p>
+        <details id="document-details" open="">
+          <summary>More details about this document</summary>
+          <dl id="document-authors">
+            <dt>Authors</dt>
+            <dd><a href="https://orcid.org/0000-0001-8492-0354" rel="schema:creator schema:author foaf:maker">Ashley Caselli</a></dd>
+            <dd><a href="https://virginiabalseiro.com/#me" rel="schema:creator schema:author foaf:maker">Virginia Balseiro</a></dd>
+          </dl>
+          <dl id="document-publisher">
+            <dt>Publisher</dt>
+            <dd><a href="https://knowledgepixels.com/" rel="schema:publisher">Knowledge Pixels</a></dd>
+          </dl>
+          <dl id="document-published">
+            <dt>Published</dt>
+            <dd><time datatype="xsd:date" datetime="2026-09-29" property="schema:datePublished">2026-09-29</time></dd>
+          </dl>
+          <dl id="document-language">
+            <dt>Language</dt>
+            <dd><span content="en" lang="" property="dcterms:language" xml:lang="">English</span></dd>
+          </dl>
+          <dl id="document-type">
+            <dt>Document Type</dt>
+            <dd><a href="http://purl.org/ontology/bibo/Slideshow" rel="rdf:type">Slideshow</a></dd>
+          </dl>
+          <dl id="document-topics">
+            <dt>Topics</dt>
+            <dd>
+              <ul rel="schema:about">
+                <li><a href="https://en.wikipedia.org/wiki/Nanopublication">Nanopublication</a></li>
+                <li><a href="https://en.wikipedia.org/wiki/Linked_data">Linked data</a></li>
+                <li><a href="https://en.wikipedia.org/wiki/Knowledge_graph">Knowledge graph</a></li>
+                <li><a href="https://en.wikipedia.org/wiki/FAIR_data">FAIR data</a></li>
+              </ul>
+            </dd>
+          </dl>
+          <dl id="document-audience">
+            <dt>Audience</dt>
+            <dd>
+              <ul rel="schema:audience">
+                <li><a href="https://www.wikidata.org/entity/Q1650915">Researcher</a></li>
+              </ul>
+            </dd>
+          </dl>
+        </details>
       </header>
 
       <section class="slide cover-slide" id="cover" inlist="" rel="schema:hasPart" resource="#cover" typeof="bibo:Slide">
         <div class="logo">knowledge<br />p<span class="accent">i</span>xels</div>
-        <h2 property="schema:name" style="font: bold 30px/1.25 Arial, sans-serif; color: #D81B60;">Nanopublications: a decentralized common for research knowledge</h2>
+        <h2 property="schema:name">Nanopublications: a decentralized common for research knowledge</h2>
         <div datatype="rdf:HTML" property="schema:description">
-          <p class="mono">Ashley Caselli · Knowledge Pixels · 29 September 2026</p>
-          <p class="mono small muted"><a href="https://knowledgepixels.com/">knowledgepixels.com</a></p>
+          <p><span about="" rel="bibo:presentedAt" resource="#event-presentation" rev="bibo:presents"></span></p>
+          <p resource="#event-presentation" typeof="schema:Event bibo:Conference"><span rel="schema:superEvent" resource="#rdf-linked-data-seminar" rev="schema:subEvent" typeof="schema:Event"><span property="schema:name">RDF &amp; Linked Data seminar</span></span>, <a href="https://www.unige.ch/" rel="schema:organizer">University of Geneva</a>, <a href="http://www.wikidata.org/entity/Q71" rel="schema:location" resource="dbr:Geneva">Geneva</a>, <time datatype="xsd:date" datetime="2026-09-29" property="schema:startDate">2026-09-29</time></p>
+          <address>
+            <img alt="Ashley Caselli's avatar" height="72" src="https://media.licdn.com/dms/image/v2/D4E03AQHNulscyD2nFQ/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1715779387236?e=1792022400&amp;v=beta&amp;t=uzbLGjsCDfLp-jChJgt2tS0Ji3IkhgGvtMXRUlubxjc" width="72" />
+            <span>Ashley Caselli</span>
+            <a about="#event-presentation" class="do-print-a-href-hide" href="https://orcid.org/0000-0001-8492-0354" rel="schema:performer">https://orcid.org/0000-0001-8492-0354</a>
+            <span>Knowledge Pixels</span>
+            <br />
+            <img alt="Virginia Balseiro's avatar" height="72" src="https://virginiabalseiro.com/assets/images/profile.jpg" width="72" />
+            <span>Virginia Balseiro</span>
+            <a about="#event-presentation" class="do-print-a-href-hide" href="https://virginiabalseiro.com/#me" rel="schema:performer">https://virginiabalseiro.com/#me</a>
+            <span>@yesvirginia</span>
+          </address>
+          <footer>
+            <dl>
+              <dt>Company</dt>
+              <dd><a class="do-print-a-href-hide" href="https://knowledgepixels.com/" rel="schema:workFeatured">https://knowledgepixels.com/</a></dd>
+              <dt>Try it</dt>
+              <dd><a about="#event-presentation" class="do-print-a-href-hide" href="https://nanodash.knowledgepixels.com/" rel="schema:workFeatured">https://nanodash.knowledgepixels.com/</a></dd>
+            </dl>
+          </footer>
         </div>
       </section>
 
@@ -124,19 +189,19 @@
             </ul>
             <p class="muted">Today these are locked in PDFs, scattered across posts, events, websites and repositories — unstructured, quickly outdated, and hard to attribute.</p>
           </div>
-          <img src="media/problem.png" alt="Scientific knowledge scattered across posts, events, papers, reviews, datasets and websites: unstructured and disconnected, quickly outdated, restricted kinds of content, off-the-record interaction" style="max-height: 460px; margin: 0 auto;" />
+          <img alt="Scientific knowledge scattered across posts, events, papers, reviews, datasets and websites: unstructured and disconnected, quickly outdated, restricted kinds of content, off-the-record interaction" height="1230" rel="schema:image" src="media/problem.png" width="900" />
+          <footer class="brand"><p>knowledge <span>pixels</span></p></footer>
         </div>
-        <p class="brand">knowledge <span>pixels</span></p>
       </section>
 
       <section class="slide" id="nanopublications" inlist="" rel="schema:hasPart" resource="#nanopublications" typeof="bibo:Slide">
         <h2 property="schema:name"><span class="key">Nanopublications:</span> claims as first-class citizens</h2>
         <div datatype="rdf:HTML" property="schema:description" class="cols c2">
           <div class="np">
-            <p class="mono tiny muted" style="margin:0">Head · https://w3id.org/np/RA…</p>
+            <p class="mono tiny muted">Head · https://w3id.org/np/RA…</p>
             <div class="graph a"><h3>Assertion</h3><p>the claim itself — e.g. gene A affects disease B</p></div>
             <div class="graph p"><h3 class="blue">Provenance</h3><p>where the assertion comes from — study, dataset, method</p></div>
-            <div class="graph i"><h3 style="color:#111">Publication info</h3><p>who published it, when, licence, signature</p></div>
+            <div class="graph i"><h3>Publication info</h3><p>who published it, when, licence, signature</p></div>
           </div>
           <ul>
             <li>Small, self-contained snippet of a knowledge graph (RDF)</li>
@@ -145,42 +210,42 @@
             <li>Identified by a content-derived trusty URI → <strong>immutable</strong>, <strong>verifiable</strong>, <strong>citable</strong></li>
             <li>Together: one decentralized knowledge graph, not another silo</li>
           </ul>
+          <footer class="brand"><p>knowledge <span>pixels</span></p></footer>
         </div>
-        <p class="brand">knowledge <span>pixels</span></p>
       </section>
 
       <section class="slide" id="trusty-uris" inlist="" rel="schema:hasPart" resource="#trusty-uris" typeof="bibo:Slide">
         <h2 property="schema:name"><span class="key">Trusty URIs:</span> immutable and verifiable</h2>
         <div datatype="rdf:HTML" property="schema:description">
-          <div class="cols c4" style="margin-top: 20px;">
+          <div class="cols c4">
             <div class="card"><h3>1 · Content</h3><p>assertion + provenance + pubinfo, normalized</p></div>
             <div class="card"><h3 class="blue">2 · Sign</h3><p>author's private key signs the content</p></div>
             <div class="card"><h3>3 · Hash</h3><p>hash of content + signature becomes the ID: …/np/RA…</p></div>
             <div class="card"><h3 class="blue">4 · Verify</h3><p>anyone can recompute the hash and check the signature</p></div>
           </div>
-          <p style="margin-top: 36px;"><strong class="accent">Consequence:</strong> a changed nanopublication is a new nanopublication. Updates and retractions are themselves published — nothing is silently overwritten.</p>
+          <p><strong class="accent">Consequence:</strong> a changed nanopublication is a new nanopublication. Updates and retractions are themselves published — nothing is silently overwritten.</p>
+          <footer class="brand"><p>knowledge <span>pixels</span></p></footer>
         </div>
-        <p class="brand">knowledge <span>pixels</span></p>
       </section>
 
       <section class="slide" id="ecosystem" inlist="" rel="schema:hasPart" resource="#ecosystem" typeof="bibo:Slide">
         <h2 property="schema:name"><span class="key">The Ecosystem:</span> from format to platform</h2>
-        <div datatype="rdf:HTML" property="schema:description" class="cols" style="grid-template-columns: 330px 1fr;">
-          <img src="media/stack.png" alt="Solution stack: Nanodash platform, P2P network infrastructure, nanopublications format" style="max-height: 470px;" />
-          <div>
-            <div class="step" style="text-align:left; display:grid; grid-template-columns: 64px 1fr; margin-bottom: 14px;"><span class="num">1</span><div><b>Registries</b><span>decentralized network that replicates and validates what is published</span></div></div>
-            <div class="step" style="text-align:left; display:grid; grid-template-columns: 64px 1fr; margin-bottom: 14px;"><span class="num blue">2</span><div><b>Query services</b><span>SPARQL endpoints and ready-made APIs over the whole network</span></div></div>
-            <div class="step" style="text-align:left; display:grid; grid-template-columns: 64px 1fr; margin-bottom: 14px;"><span class="num">3</span><div><b>Trust layer</b><span>binds signing keys to identities: ORCID, WebID or any other ID</span></div></div>
-            <div class="step" style="text-align:left; display:grid; grid-template-columns: 64px 1fr;"><span class="num blue">4</span><div><b>Knowledge Apps (clients)</b><span>Nanodash, dokieli, embeddable elements, WordPress, Hugo, and a skill for AI agents</span></div></div>
+        <div datatype="rdf:HTML" property="schema:description" class="cols c-2-3">
+          <img alt="Solution stack: Nanodash platform, P2P network infrastructure, nanopublications format" height="1190" rel="schema:image" src="media/stack.png" width="1030" />
+          <div class="step-list">
+            <div class="step"><span class="num">1</span><div><b>Registries</b><span>decentralized network that replicates and validates what is published</span></div></div>
+            <div class="step"><span class="num blue">2</span><div><b>Query services</b><span>SPARQL endpoints and ready-made APIs over the whole network</span></div></div>
+            <div class="step"><span class="num">3</span><div><b>Trust layer</b><span>binds signing keys to identities: ORCID, WebID or any other ID</span></div></div>
+            <div class="step"><span class="num blue">4</span><div><b>Knowledge Apps (clients)</b><span>Nanodash, dokieli, embeddable elements, WordPress, Hugo, and a skill for AI agents</span></div></div>
           </div>
+          <footer class="brand"><p>knowledge <span>pixels</span></p></footer>
         </div>
-        <p class="brand">knowledge <span>pixels</span></p>
       </section>
 
       <section class="slide" id="architecture" inlist="" rel="schema:hasPart" resource="#architecture" typeof="bibo:Slide">
         <h2 property="schema:name"><span class="key">Architecture:</span> how the pieces fit together</h2>
-        <div datatype="rdf:HTML" property="schema:description" class="cols" style="grid-template-columns: 440px 1fr;">
-          <img src="media/arch.svg" alt="Nanopub ecosystem architecture: third-party systems and nanopub-http; core network of Nanodash, Nanopub Registry and Nanopub Query; Vodex, Nanopub Monitor and Ecosystem Test Simulator; libraries nanopub-java, -js, -rs, -py and testsuite" style="max-height: 480px;" />
+        <div datatype="rdf:HTML" property="schema:description" class="cols c2">
+          <img alt="Nanopub ecosystem architecture: third-party systems and nanopub-http; core network of Nanodash, Nanopub Registry and Nanopub Query; Vodex, Nanopub Monitor and Ecosystem Test Simulator; libraries nanopub-java, -js, -rs, -py and testsuite" height="1256" rel="schema:image" src="media/arch.svg" width="1189" />
           <div class="small">
             <h3>Core network</h3>
             <ul>
@@ -197,8 +262,8 @@
             <ul><li>nanopub-java · -js · -rs · -py, plus a shared testsuite</li></ul>
             <p class="mono tiny"><a href="https://monitor.nanodash.net/">monitor.nanodash.net</a></p>
           </div>
+          <footer class="brand"><p>knowledge <span>pixels</span></p></footer>
         </div>
-        <p class="brand">knowledge <span>pixels</span></p>
       </section>
 
       <section class="slide" id="registries" inlist="" rel="schema:hasPart" resource="#registries" typeof="bibo:Slide">
@@ -219,8 +284,8 @@
             <li>No single point of failure or control</li>
             <li class="placeholder">[Add current numbers: registries, nanopublications, agents]</li>
           </ul>
+          <footer class="brand"><p>knowledge <span>pixels</span></p></footer>
         </div>
-        <p class="brand">knowledge <span>pixels</span></p>
       </section>
 
       <section class="slide" id="query-services" inlist="" rel="schema:hasPart" resource="#query-services" typeof="bibo:Slide">
@@ -241,8 +306,8 @@ ORDER BY DESC(?date) LIMIT 10</code></pre>
             <li>Results as JSON/CSV for apps, dashboards and scripts</li>
             <li class="placeholder">[Replace with a query from your real use case + live endpoint URL]</li>
           </ul>
+          <footer class="brand"><p>knowledge <span>pixels</span></p></footer>
         </div>
-        <p class="brand">knowledge <span>pixels</span></p>
       </section>
 
       <section class="slide" id="trust-layer" inlist="" rel="schema:hasPart" resource="#trust-layer" typeof="bibo:Slide">
@@ -256,59 +321,59 @@ ORDER BY DESC(?date) LIMIT 10</code></pre>
           </div>
           <div class="callout"><strong class="accent">Not tied to ORCID.</strong> The registries compute trust over agent identifiers, whatever scheme they use. ORCID is today's default in Nanodash; WebID, institutional identifiers or other ID systems can take the same role.</div>
           <p><strong class="accent">Why it matters:</strong> attribution is cryptographic, not just a name in a metadata field, and it works across every registry and application.</p>
+          <footer class="brand"><p>knowledge <span>pixels</span></p></footer>
         </div>
-        <p class="brand">knowledge <span>pixels</span></p>
       </section>
 
       <section class="slide" id="nanodash" inlist="" rel="schema:hasPart" resource="#nanodash" typeof="bibo:Slide">
         <h2 property="schema:name"><span class="key">Nanodash:</span> publishing without writing RDF</h2>
         <div datatype="rdf:HTML" property="schema:description">
-          <img src="media/nanodash.png" alt="Nanodash hosting knowledge apps over time, with researchers and AI agents as first-class citizens" style="max-height: 330px; margin: 0 auto 14px;" />
+          <img alt="Nanodash hosting knowledge apps over time, with researchers and AI agents as first-class citizens" height="1280" rel="schema:image" src="media/nanodash.png" width="2850" />
           <div class="cols c3">
             <div class="card"><h3>Templates</h3><p>forms generate valid, signed nanopublications</p></div>
             <div class="card"><h3 class="blue">Spaces</h3><p>communities, projects, groups get their own space</p></div>
             <div class="card"><h3>Views</h3><p>live, queryable views over everything published</p></div>
           </div>
+          <footer class="brand"><p>knowledge <span>pixels</span></p></footer>
         </div>
-        <p class="brand">knowledge <span>pixels</span></p>
       </section>
 
       <section class="slide" id="clients" inlist="" rel="schema:hasPart" resource="#clients" typeof="bibo:Slide">
         <h2 property="schema:name"><span class="key">Clients:</span> not just Nanodash any more</h2>
         <div datatype="rdf:HTML" property="schema:description" class="rows">
-          <div class="row"><b><a href="https://nanodash.knowledgepixels.com/" style="color:inherit; background:none;">Nanodash</a></b><span>full web client: templates, spaces, views</span><span class="pill">live</span></div>
-          <div class="row"><b><a href="https://dokie.li/" style="color:inherit; background:none;">dokieli</a></b><span>publish annotations as nanopubs while reading or writing a document</span><span class="pill">live</span></div>
+          <div class="row"><b><a href="https://nanodash.knowledgepixels.com/">Nanodash</a></b><span>full web client: templates, spaces, views</span><span class="pill">live</span></div>
+          <div class="row"><b><a href="https://dokie.li/">dokieli</a></b><span>publish annotations as nanopubs while reading or writing a document</span><span class="pill">live</span></div>
           <div class="row"><b>nanopub-elements</b><span>web components to embed nanopubs into an existing website</span><span class="pill">live</span></div>
           <div class="row"><b>nanopub-wp</b><span>WordPress plugin for publishing and showing nanopubs</span><span class="pill dev">in development</span></div>
           <div class="row"><b>nanopub-hugo</b><span>build static websites from nanopublications</span><span class="pill">live</span></div>
           <div class="row"><b>nanopub-skill</b><span>lets AI agents query and publish nanopubs</span><span class="pill">live</span></div>
+          <footer class="brand"><p>knowledge <span>pixels</span></p></footer>
         </div>
-        <p class="brand">knowledge <span>pixels</span></p>
       </section>
 
       <section class="slide" id="enables" inlist="" rel="schema:hasPart" resource="#enables" typeof="bibo:Slide">
         <h2 property="schema:name"><span class="key">What this enables</span> for research &amp; data management</h2>
-        <div datatype="rdf:HTML" property="schema:description" class="cols c2" style="gap: 16px;">
-          <div class="card" style="min-height: 150px;"><h3>Citable units</h3><p>every claim, dataset description or review is individually citable, with clear attribution</p></div>
-          <div class="card" style="min-height: 150px;"><h3 class="blue">FAIR by construction</h3><p>machine-actionable metadata with persistent IDs, standard vocabularies and explicit licences</p></div>
-          <div class="card" style="min-height: 150px;"><h3 class="blue">Explicit provenance &amp; retraction</h3><p>updates and retractions are published nanopubs linked to the original — nothing silently disappears</p></div>
-          <div class="card" style="min-height: 150px;"><h3>Trustworthy layer for AI agents</h3><p>agents read signed, attributed knowledge and publish back under their own identity</p></div>
+        <div datatype="rdf:HTML" property="schema:description" class="cols c2">
+          <div class="card"><h3>Citable units</h3><p>every claim, dataset description or review is individually citable, with clear attribution</p></div>
+          <div class="card"><h3 class="blue">FAIR by construction</h3><p>machine-actionable metadata with persistent IDs, standard vocabularies and explicit licences</p></div>
+          <div class="card"><h3 class="blue">Explicit provenance &amp; retraction</h3><p>updates and retractions are published nanopubs linked to the original — nothing silently disappears</p></div>
+          <div class="card"><h3>Trustworthy layer for AI agents</h3><p>agents read signed, attributed knowledge and publish back under their own identity</p></div>
+          <footer class="brand"><p>knowledge <span>pixels</span></p></footer>
         </div>
-        <p class="brand">knowledge <span>pixels</span></p>
       </section>
 
       <section class="slide" id="spaces" inlist="" rel="schema:hasPart" resource="#spaces" typeof="bibo:Slide">
         <h2 property="schema:name"><span class="key">Spaces:</span> groups, projects, conferences</h2>
         <div datatype="rdf:HTML" property="schema:description" class="cols c-img">
-          <img src="media/webcontent.png" alt="Screenshots of Nanodash spaces for a research center, a researcher profile and a conference (mock-up data)" />
+          <img alt="Screenshots of Nanodash spaces for a research center, a researcher profile and a conference (mock-up data)" height="1320" rel="schema:image" src="media/webcontent.png" width="1760" />
           <ul>
             <li>Research groups, projects, organizations, communities and events each get a space</li>
             <li>Content is contributed by members and AI agents as nanopublications</li>
             <li>Views update instantly as new content is published anywhere in the network</li>
             <li>Content is integrated across spaces, not copied</li>
           </ul>
+          <footer class="brand"><p>knowledge <span>pixels</span></p></footer>
         </div>
-        <p class="brand">knowledge <span>pixels</span></p>
       </section>
 
       <section class="slide" id="fair-implementation-space" inlist="" rel="schema:hasPart" resource="#fair-implementation-space" typeof="bibo:Slide">
@@ -321,20 +386,20 @@ ORDER BY DESC(?date) LIMIT 10</code></pre>
             <div class="stat"><b>233</b>FAIR communities</div>
             <div class="stat"><b>31</b>qualified curators</div>
           </div>
-          <div class="card" style="margin-top: 24px; padding: 18px;">
-            <p style="font-size: 19px;">FAIR is implemented by communities making choices — <strong class="accent">here those choices are themselves FAIR.</strong></p>
+          <div class="card">
+            <p>FAIR is implemented by communities making choices — <strong class="accent">here those choices are themselves FAIR.</strong></p>
             <p class="muted small">FIP Matrix · curated resource collections · search across profiles, resources and communities</p>
           </div>
-          <p class="mono small" style="margin-top: 14px;"><a href="https://w3id.org/spaces/FAIR-Implementation-Space" rel="schema:mentions">w3id.org/spaces/FAIR-Implementation-Space</a></p>
+          <p class="mono small"><a href="https://w3id.org/spaces/FAIR-Implementation-Space" rel="schema:mentions">w3id.org/spaces/FAIR-Implementation-Space</a></p>
+          <footer class="brand"><p>knowledge <span>pixels</span></p></footer>
         </div>
-        <p class="brand">knowledge <span>pixels</span></p>
       </section>
 
       <section class="slide" id="shared-vocabularies" inlist="" rel="schema:hasPart" resource="#shared-vocabularies" typeof="bibo:Slide">
         <h2 property="schema:name"><span class="key">Shared vocabularies:</span> consensus building with VITO</h2>
         <div datatype="rdf:HTML" property="schema:description">
-          <p class="lead"><strong style="color:#111">Personal Exposure Health (PEH) Vocabularies</strong> — collaborative management of vocabularies for FAIRification in chemical risk assessment and personal exposure health</p>
-          <div class="steps" style="margin-bottom: 6px;">
+          <p class="lead"><strong>Personal Exposure Health (PEH) Vocabularies</strong> — collaborative management of vocabularies for FAIRification in chemical risk assessment and personal exposure health</p>
+          <div class="steps">
             <div class="step"><span class="num">1</span><b>Propose</b><span>new term as a signed nanopub</span></div>
             <div class="step"><span class="num">2</span><b>Discuss</b><span>comments &amp; alternatives, attributed</span></div>
             <div class="step"><span class="num">3</span><b>Approve</b><span>admins and helpers of the space</span></div>
@@ -346,25 +411,25 @@ ORDER BY DESC(?date) LIMIT 10</code></pre>
             <div class="card"><h3 class="blue">Indicator Vocabulary</h3><p>I-ADOPT variables for chemical exposome research</p><p class="mono tiny"><a href="https://w3id.org/spaces/chemical-exposome-indicator">…/chemical-exposome-indicator</a></p></div>
             <div class="card"><h3>Matrix Vocabulary</h3><p>OWL ontology of exposome matrices</p><p class="mono tiny"><a href="https://w3id.org/spaces/chemical-exposome-matrix">w3id.org/peh/matrices/</a></p></div>
           </div>
-          <p class="small muted" style="margin-top: 10px;">Each vocabulary is maintained by its own community space inside the PEH group · <a class="mono" href="https://w3id.org/spaces/peh-vocs" rel="schema:mentions">w3id.org/spaces/peh-vocs</a></p>
+          <p class="small muted">Each vocabulary is maintained by its own community space inside the PEH group · <a class="mono" href="https://w3id.org/spaces/peh-vocs" rel="schema:mentions">w3id.org/spaces/peh-vocs</a></p>
+          <footer class="brand"><p>knowledge <span>pixels</span></p></footer>
         </div>
-        <p class="brand">knowledge <span>pixels</span></p>
       </section>
 
       <section class="slide" id="science-live" inlist="" rel="schema:hasPart" resource="#science-live" typeof="bibo:Slide">
         <h2 property="schema:name"><span class="key">Science Live:</span> make your research investment count</h2>
         <div datatype="rdf:HTML" property="schema:description">
           <p class="lead">VitenHub · Knowledge Pixels · Prophet Town — funded by the Astera Institute, launched 2026</p>
-          <div class="cols c2" style="gap: 24px;">
+          <div class="cols c2">
             <div>
               <h3>Reusable knowledge &amp; replication</h3>
-              <div class="cols" style="grid-template-columns: 210px 1fr; gap: 14px;">
+              <div class="cols c2">
                 <div class="chain">
-                  <div style="background:#FCE4EC; border:1px solid #D81B60;"><b class="accent">Original finding</b>signed by author A</div>
+                  <div class="a"><b class="accent">Original finding</b>signed by author A</div>
                   <div class="arrow">▼</div>
-                  <div style="background:#E3F2FD; border:1px solid #1E88E5;"><b class="blue">Replication</b>different data, author B</div>
+                  <div class="p"><b class="blue">Replication</b>different data, author B</div>
                   <div class="arrow">▼</div>
-                  <div style="background:#E3F2FD; border:1px solid #1E88E5;"><b class="blue">Replication</b>different method, author C</div>
+                  <div class="p"><b class="blue">Replication</b>different method, author C</div>
                 </div>
                 <p class="small"><em>A signed, verifiable chain of nanopublications: every result can be traced, checked and built on.</em></p>
               </div>
@@ -379,14 +444,14 @@ ORDER BY DESC(?date) LIMIT 10</code></pre>
               </ul>
             </div>
           </div>
-          <div class="cols c3" style="margin-top: 12px;">
+          <div class="cols c3">
             <div class="card"><h3>Create</h3><p>templates · Zotero plugin · PRISMA</p></div>
             <div class="card"><h3 class="blue">Discover</h3><p>structured queries with full provenance</p></div>
             <div class="card"><h3>Embed &amp; Track</h3><p>embed viewer · themes · dashboards</p></div>
           </div>
-          <p class="mono small" style="margin-top: 8px;"><a href="https://sciencelive4all.org/" rel="schema:mentions">sciencelive4all.org</a></p>
+          <p class="mono small"><a href="https://sciencelive4all.org/" rel="schema:mentions">sciencelive4all.org</a></p>
+          <footer class="brand"><p>knowledge <span>pixels</span></p></footer>
         </div>
-        <p class="brand">knowledge <span>pixels</span></p>
       </section>
 
       <section class="slide" id="dokieli" inlist="" rel="schema:hasPart" resource="#dokieli" typeof="bibo:Slide">
@@ -394,11 +459,11 @@ ORDER BY DESC(?date) LIMIT 10</code></pre>
         <div datatype="rdf:HTML" property="schema:description">
           <p class="lead">Decentralised authoring and annotation in the browser: Linked Data documents, Solid WebID, Web Annotations, Linked Data Notifications</p>
           <div class="cols c2">
-            <div>
-              <div class="step" style="text-align:left; display:grid; grid-template-columns: 64px 1fr; margin-bottom: 10px;"><span class="num">1</span><div><b>Select</b><span>a sentence in an article or a nanopub page</span></div></div>
-              <div class="step" style="text-align:left; display:grid; grid-template-columns: 64px 1fr; margin-bottom: 10px;"><span class="num blue">2</span><div><b>Annotate</b><span>comment, question, agree or dispute</span></div></div>
-              <div class="step" style="text-align:left; display:grid; grid-template-columns: 64px 1fr; margin-bottom: 10px;"><span class="num">3</span><div><b>Publish</b><span>“publish to nanopub network”: signed with your key</span></div></div>
-              <div class="step" style="text-align:left; display:grid; grid-template-columns: 64px 1fr;"><span class="num blue">4</span><div><b>Announce</b><span>via inbox/outbox notifications to others</span></div></div>
+            <div class="step-list">
+              <div class="step"><span class="num">1</span><div><b>Select</b><span>a sentence in an article or a nanopub page</span></div></div>
+              <div class="step"><span class="num blue">2</span><div><b>Annotate</b><span>comment, question, agree or dispute</span></div></div>
+              <div class="step"><span class="num">3</span><div><b>Publish</b><span>“publish to nanopub network”: signed with your key</span></div></div>
+              <div class="step"><span class="num blue">4</span><div><b>Announce</b><span>via inbox/outbox notifications to others</span></div></div>
             </div>
             <div class="small">
               <h3>What ends up in the network</h3>
@@ -412,15 +477,15 @@ ORDER BY DESC(?date) LIMIT 10</code></pre>
               <p class="mono"><a href="https://dokie.li/" rel="schema:mentions">dokie.li</a></p>
             </div>
           </div>
+          <footer class="brand"><p>knowledge <span>pixels</span></p></footer>
         </div>
-        <p class="brand">knowledge <span>pixels</span></p>
       </section>
 
       <section class="slide" id="nanoarguments" inlist="" rel="schema:hasPart" resource="#nanoarguments" typeof="bibo:Slide">
         <h2 property="schema:name"><span class="key">Nanoarguments:</span> a graph of scholarly discourse</h2>
         <div datatype="rdf:HTML" property="schema:description">
           <p class="lead small">Funded by NLnet (NGI0 Commons Fund, European Commission) and the Swiss State Secretariat for Education, Research and Innovation</p>
-          <div class="cols" style="grid-template-columns: 400px 1fr;">
+          <div class="cols c-2-3">
             <figure>
               <svg viewBox="0 0 400 330" role="img" aria-label="Discourse graph: evidence supports a claim, a counter-argument disputes it, a question asks about it, an annotation discusses it">
                 <defs><marker id="na-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#999" /></marker></defs>
@@ -441,7 +506,7 @@ ORDER BY DESC(?date) LIMIT 10</code></pre>
                   <rect x="220" y="274" width="160" height="46" rx="6" fill="#E3F2FD" stroke="#1E88E5" /><text x="300" y="302" fill="#1E88E5">Annotation</text>
                 </g>
               </svg>
-              <figcaption class="tiny muted" style="text-align:center;"><em>each node is a signed nanopub</em></figcaption>
+              <figcaption class="tiny muted align-center"><em>each node is a signed nanopub</em></figcaption>
             </figure>
             <div class="small">
               <h3>Deliverables</h3>
@@ -456,8 +521,8 @@ ORDER BY DESC(?date) LIMIT 10</code></pre>
               <p class="mono"><a href="https://nlnet.nl/project/Nanoarguments/" rel="schema:mentions">nlnet.nl/project/Nanoarguments</a></p>
             </div>
           </div>
+          <footer class="brand"><p>knowledge <span>pixels</span></p></footer>
         </div>
-        <p class="brand">knowledge <span>pixels</span></p>
       </section>
 
       <section class="slide" id="research-workflows" inlist="" rel="schema:hasPart" resource="#research-workflows" typeof="bibo:Slide">
@@ -467,7 +532,7 @@ ORDER BY DESC(?date) LIMIT 10</code></pre>
           <div class="chevrons">
             <div class="chev">Grant application</div><div class="chev">Data management plan</div><div class="chev">Research</div><div class="chev">Final &amp; annual reporting</div>
           </div>
-          <div class="cols c4 tiny muted" style="gap: 4px; margin-bottom: 8px;">
+          <div class="cols c4 tiny muted">
             <span>aims, planned outputs, partners</span><span>datasets, standards, licences</span><span>claims, methods, datasets, replications</span><span>outputs assembled from what is already published</span>
           </div>
           <p class="quote-line">Captured once as signed nanopubs linked to researcher IDs and DOIs, then reused at every later step</p>
@@ -477,8 +542,8 @@ ORDER BY DESC(?date) LIMIT 10</code></pre>
             <div class="card"><h3>Share</h3><p>FAIR by construction; citable units others can find and build on</p></div>
             <div class="card"><h3 class="blue">Report</h3><p>the mandatory annual report becomes a query, not a yearly data hunt</p></div>
           </div>
+          <footer class="brand"><p>knowledge <span>pixels</span></p></footer>
         </div>
-        <p class="brand">knowledge <span>pixels</span></p>
       </section>
 
       <section class="slide" id="university-infrastructure" inlist="" rel="schema:hasPart" resource="#university-infrastructure" typeof="bibo:Slide">
@@ -489,8 +554,8 @@ ORDER BY DESC(?date) LIMIT 10</code></pre>
               <line x1="210" y1="200" x2="210" y2="40" /><line x1="210" y1="200" x2="360" y2="120" /><line x1="210" y1="200" x2="360" y2="280" /><line x1="210" y1="200" x2="210" y2="360" /><line x1="210" y1="200" x2="60" y2="280" /><line x1="210" y1="200" x2="60" y2="120" />
             </g>
             <circle cx="210" cy="200" r="62" fill="#D81B60" />
-            <text x="210" y="196" text-anchor="middle" fill="#FFF" font-size="16" font-weight="bold" style="font-family: 'Courier New', monospace;">nanopub</text>
-            <text x="210" y="216" text-anchor="middle" fill="#FFF" font-size="16" font-weight="bold" style="font-family: 'Courier New', monospace;">network</text>
+            <text x="210" y="196" text-anchor="middle" fill="#FFF" font-size="16" font-weight="bold" font-family="'Courier New', monospace">nanopub</text>
+            <text x="210" y="216" text-anchor="middle" fill="#FFF" font-size="16" font-weight="bold" font-family="'Courier New', monospace">network</text>
             <g font-size="13" font-weight="bold" text-anchor="middle" fill="#1E88E5">
               <rect x="150" y="20" width="120" height="40" rx="6" fill="#E3F2FD" stroke="#1E88E5" /><text x="210" y="45">CRIS / RIMS</text>
               <rect x="300" y="100" width="120" height="40" rx="6" fill="#E3F2FD" stroke="#1E88E5" /><text x="360" y="125">Repository</text>
@@ -510,21 +575,21 @@ ORDER BY DESC(?date) LIMIT 10</code></pre>
               <li>A pilot with one group or data-stewardship team</li>
             </ul>
           </div>
+          <footer class="brand"><p>knowledge <span>pixels</span></p></footer>
         </div>
-        <p class="brand">knowledge <span>pixels</span></p>
       </section>
 
       <section class="slide" id="research-outputs" inlist="" rel="schema:hasPart" resource="#research-outputs" typeof="bibo:Slide">
         <h2 property="schema:name"><span class="key">Research outputs:</span> your institute, visible</h2>
-        <div datatype="rdf:HTML" property="schema:description" class="cols" style="grid-template-columns: 360px 1fr;">
+        <div datatype="rdf:HTML" property="schema:description" class="cols c-2-3">
           <div>
             <svg viewBox="0 0 360 330" role="img" aria-label="Nanopubs at the centre, linked to articles (DOI), authors (ORCID or other ID), topics (vocabularies), datasets and methods, and groups and projects">
               <g stroke="#BBBBBB" stroke-width="2">
                 <line x1="180" y1="170" x2="180" y2="40" /><line x1="180" y1="170" x2="310" y2="130" /><line x1="180" y1="170" x2="260" y2="290" /><line x1="180" y1="170" x2="100" y2="290" /><line x1="180" y1="170" x2="50" y2="130" />
               </g>
               <circle cx="180" cy="170" r="50" fill="#D81B60" />
-              <text x="180" y="166" text-anchor="middle" fill="#FFF" font-size="15" font-weight="bold" style="font-family: 'Courier New', monospace;">nano-</text>
-              <text x="180" y="184" text-anchor="middle" fill="#FFF" font-size="15" font-weight="bold" style="font-family: 'Courier New', monospace;">pubs</text>
+              <text x="180" y="166" text-anchor="middle" fill="#FFF" font-size="15" font-weight="bold" font-family="'Courier New', monospace">nano-</text>
+              <text x="180" y="184" text-anchor="middle" fill="#FFF" font-size="15" font-weight="bold" font-family="'Courier New', monospace">pubs</text>
               <g text-anchor="middle">
                 <rect x="130" y="16" width="100" height="46" rx="6" fill="#E3F2FD" stroke="#1E88E5" /><text x="180" y="36" font-size="13" font-weight="bold" fill="#1E88E5">Articles</text><text x="180" y="53" font-size="10" fill="#666">DOI</text>
                 <rect x="255" y="106" width="105" height="46" rx="6" fill="#E3F2FD" stroke="#1E88E5" /><text x="307" y="126" font-size="13" font-weight="bold" fill="#1E88E5">Authors</text><text x="307" y="143" font-size="10" fill="#666">ORCID or other ID</text>
@@ -536,8 +601,8 @@ ORDER BY DESC(?date) LIMIT 10</code></pre>
             <p class="tiny muted">Every output is signed and linked, so each number can be traced back to the underlying contributions.</p>
           </div>
           <div>
-            <p class="mono small" style="font-weight: bold; margin-bottom: 4px;">One linked, queryable view of all outputs</p>
-            <p class="tiny muted" style="margin-bottom: 8px;">Example: FIPs by research domain, <a href="https://w3id.org/spaces/FAIR-Implementation-Space">FAIR Implementation Space</a></p>
+            <p class="mono small"><strong>One linked, queryable view of all outputs</strong></p>
+            <p class="tiny muted">Example: FIPs by research domain, <a href="https://w3id.org/spaces/FAIR-Implementation-Space">FAIR Implementation Space</a></p>
             <div class="bars">
               <span>Natural Science</span><div class="bar" style="width: 85%;"><span>125</span></div>
               <span>Life Science</span><div class="bar" style="width: 56.4%;"><span>83</span></div>
@@ -546,23 +611,23 @@ ORDER BY DESC(?date) LIMIT 10</code></pre>
               <span>Computer Science</span><div class="bar" style="width: 16.3%;"><span>24</span></div>
               <span>Humanities</span><div class="bar" style="width: 2.7%;"><span>4</span></div>
             </div>
-            <p class="mono tiny muted" style="margin: 8px 0 12px;">154 FIPs · 233 communities · 1,238 resources · as of 29 Sep 2026</p>
-            <div class="cols c2" style="gap: 12px;">
+            <p class="mono tiny muted">154 FIPs · 233 communities · 1,238 resources · as of 29 Sep 2026</p>
+            <div class="cols c2">
               <div class="card"><h3>Amount</h3><p>outputs per group, topic, author, over time — beyond article counts</p></div>
               <div class="card"><h3 class="blue">Quality signals</h3><p>replications, endorsements, reuse and citations of individual claims</p></div>
             </div>
           </div>
+          <footer class="brand"><p>knowledge <span>pixels</span></p></footer>
         </div>
-        <p class="brand">knowledge <span>pixels</span></p>
       </section>
 
       <section class="slide" id="knowledge-apps" inlist="" rel="schema:hasPart" resource="#knowledge-apps" typeof="bibo:Slide">
         <h2 property="schema:name"><span class="key">Knowledge Apps:</span> a growing family</h2>
         <div datatype="rdf:HTML" property="schema:description">
-          <img src="media/apps.png" alt="Knowledge Apps mock-ups: Scholarly Discourse Live, Reliable Knowledge Assistant, Precise Knowledge Updates, Big Picture of Knowledge" style="max-height: 440px; margin: 0 auto;" />
-          <p class="mono tiny" style="margin-top: 8px;">Four examples — the set of Knowledge Apps keeps growing <span class="placeholder">[add current list]</span> <span class="muted" style="float: right; font-style: italic;">mock-ups</span></p>
+          <img alt="Knowledge Apps mock-ups: Scholarly Discourse Live, Reliable Knowledge Assistant, Precise Knowledge Updates, Big Picture of Knowledge" height="1360" rel="schema:image" src="media/apps.png" width="2880" />
+          <p class="mono tiny">Four examples — the set of Knowledge Apps keeps growing <span class="placeholder">[add current list]</span> <em class="muted">(mock-ups)</em></p>
+          <footer class="brand"><p>knowledge <span>pixels</span></p></footer>
         </div>
-        <p class="brand">knowledge <span>pixels</span></p>
       </section>
 
       <section class="slide dark" id="thank-you" inlist="" rel="schema:hasPart" resource="#thank-you" typeof="bibo:Slide">
